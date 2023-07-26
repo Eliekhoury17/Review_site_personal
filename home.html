@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="public/style.css">
+    <title>Home</title>
+</head>
+
+<body>
+    <div class="banner">
+        <div class="left-buttons">
+            <a href="home.html">Home</a>
+            <a href="login.html">Login</a>
+            <a href="register.html">Register</a>
+        </div>
+        <div class="right-search">
+        </div>
+    </div>
+    <div class="text">Welcome</div>
+    <div class="slideshow-container">
+        <div class="mySlides fade">
+          <div class="numbertext">1 / 3</div>
+          <img src="public/slideshow_books.jpg"  style="width: 1519px; height: 600px;">
+        </div>
+        
+        <div class="mySlides fade">
+          <div class="numbertext">2 / 3</div>
+          <img src="public/slideshow_articles.png"  style="width: 1519px; height: 600px;">
+        </div>
+        
+        <div class="mySlides fade">
+          <div class="numbertext">3 / 3</div>
+          <img src="public/slideshow_film.png"  style="width: 1519px; height: 600px;">
+        </div>
+        
+        </div>
+        <br>
+        
+        <div style="text-align:center">
+          <span class="dot"></span> 
+          <span class="dot"></span> 
+          <span class="dot"></span> 
+        </div>
+    </div>
+    <div class="books">
+        <div class="flip-box">
+            <div class="flip-box-inner">
+                <div class="flip-box-front">
+                    <img src="public/books_profile.jpg" alt="Description" style="width:100%;height:100%">
+                </div>
+                <div class="flip-box-back">
+                    <h2>Description</h2>
+                    <p>In this section you can add books you read and comment other books</p>
+                </div>
+            </div>
+        </div>
+        <div class="button_link">
+            <a href="" class="button">Learn more</a>
+        </div>
+    </div>
+    <div class="articles">
+        <div class="button_link">
+            <a href="" class="button">Learn more</a>
+        </div>
+        <div class="flip-box">
+            <div class="flip-box-inner">
+                <div class="flip-box-front">
+                    <img src="public/books_profile.jpg" alt="Description" style="width:100%;height:100%">
+                </div>
+                <div class="flip-box-back">
+                    <h2>Description</h2>
+                    <p>In this section you can add books you read and comment other books</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="films">
+        <div class="flip-box">
+            <div class="flip-box-inner">
+                <div class="flip-box-front">
+                    <img src="public/books_profile.jpg" alt="Description" style="width:100%;height:100%">
+                </div>
+                <div class="flip-box-back">
+                    <h2>Description</h2>
+                    <p>In this section you can add books you read and comment other books</p>
+                </div>
+            </div>
+        </div>
+        <div class="button_link">
+            <a href="" class="button">Learn more</a>
+        </div>
+    </div>
+
+    <script>
+        let slideIndex = 0;
+        showSlides();
+        
+        function showSlides() {
+          let i;
+          let slides = document.getElementsByClassName("mySlides");
+          let dots = document.getElementsByClassName("dot");
+          for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";  
+          }
+          slideIndex++;
+          if (slideIndex > slides.length) {slideIndex = 1}    
+          for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+          }
+          slides[slideIndex-1].style.display = "block";  
+          dots[slideIndex-1].className += " active";
+          setTimeout(showSlides, 2000); // Change image every 2 seconds
+        }
+    </script>
+</body>
+</html>
