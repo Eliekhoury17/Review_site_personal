@@ -196,6 +196,10 @@ body{
     background-color: #5085a5;
 }
 
+.mes-err{
+    color:#31708e;
+}
+
 .login-body{
     margin: 200px 595px 400px;
     padding-left: 60px;
