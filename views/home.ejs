@@ -46,27 +46,40 @@
                     <img src="books/books_profile.jpg" alt="Description" style="width:100%;height:100%">
                 </div>
                 <div class="flip-box-back">
-                    <h2>Description</h2>
-                    <p>In this section you can add books you read and comment other books</p>
+                    <h2>Books reviews</h2>
+                    <p>In this section you can add books you read and comment and review other books that people posted.</p>
                 </div>
             </div>
         </div>
-        <div class="button_link">
-            <a href="" class="button">Learn more</a>
-        </div>
+        <% if (iduser===undefined){%>
+            <div class="button_link">
+                <a href="/login" class="button">Learn more</a>
+            </div>
+        <%}else{%>
+            <div class="button_link">
+                <a href="/books_review" class="button">Learn more</a>
+            </div>
+        <%}%>
+        
     </div>
     <div class="articles">
-        <div class="button_link">
-            <a href="" class="button">Learn more</a>
-        </div>
+        <% if (iduser===undefined){%>
+            <div class="button_link">
+                <a href="/login" class="button">Learn more</a>
+            </div>
+        <%}else{%>
+            <div class="button_link">
+                <a href="/articles_review" class="button">Learn more</a>
+            </div>
+        <%}%>
         <div class="flip-box">
             <div class="flip-box-inner">
                 <div class="flip-box-front">
                     <img src="articles/article_profile.png" alt="Description" style="width:100%;height:100%">
                 </div>
                 <div class="flip-box-back">
-                    <h2>Description</h2>
-                    <p>In this section you can add books you read and comment other books</p>
+                    <h2>Articles reviews</h2>
+                    <p>In this section you can add articles you read or wrote and comment and review other articles that people posted.</p>
                 </div>
             </div>
         </div>
@@ -78,14 +91,20 @@
                     <img src="films/film_profile.png" alt="Description" style="width:100%;height:100%">
                 </div>
                 <div class="flip-box-back">
-                    <h2>Description</h2>
-                    <p>In this section you can add books you read and comment other books</p>
+                    <h2>Films reviews</h2>
+                    <p>In this section you can add films you watched and comment and review other films that people posted.</p>
                 </div>
             </div>
         </div>
-        <div class="button_link">
-            <a href="" class="button">Learn more</a>
-        </div>
+        <% if (iduser===undefined){%>
+            <div class="button_link">
+                <a href="/login" class="button">Learn more</a>
+            </div>
+        <%}else{%>
+            <div class="button_link">
+                <a href="/films_review" class="button">Learn more</a>
+            </div>
+        <%}%>
     </div>
 
     <script>
@@ -106,7 +125,7 @@
           }
           slides[slideIndex-1].style.display = "block";  
           dots[slideIndex-1].className += " active";
-          setTimeout(showSlides, 2000); // Change image every 2 seconds
+          setTimeout(showSlides, 3000); // Change image every 2 seconds
         }
     </script>
 </body>

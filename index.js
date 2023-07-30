@@ -22,19 +22,56 @@ let db = require("./db")
 app.use(express.static('public'));
 app.use(bodyParser.json());
 
-const {getID,addUser,getUser} = require("./db");
+const {getID,getAge,getName,getEmail,addUser,getUser} = require("./db");
+const { name } = require('ejs');
 
 ///////////////////  GET   ////////////////////////////////////////////////////////
 app.get("/", (req, res) => {
+    let iduser;
     iduser=req.session.ID;
-    res.render("home",{username:req.session.username});
+    res.render("home",{username:req.session.username,name:req.session.name,
+        age:req.session.age,email:req.session.email,error1:req.session.error1,error2:req.session.error2,iduser:iduser});
 });
 
 app.get("/login", (req, res) => {
-    res.render("login",{username:req.session.username,error2:req.session.error2,error1:req.session.error1});
+    let iduser;
+    iduser=req.session.ID;
+    res.render("login",{username:req.session.username,name:req.session.name,
+        age:req.session.age,email:req.session.email,error1:req.session.error1,error2:req.session.error2,iduser:iduser});
 });
 app.get("/register", (req, res) => {
-    res.render("register",{username:req.session.username,error1:req.session.error1,error2:req.session.error2});
+    let iduser;
+    iduser=req.session.ID;
+    res.render("register",{username:req.session.username,name:req.session.name,
+        age:req.session.age,email:req.session.email,error1:req.session.error1,error2:req.session.error2,iduser:iduser});
+});
+
+app.get("/books_review", (req, res) => {
+    let iduser;
+    iduser=req.session.ID;
+    res.render("books_review",{username:req.session.username,name:req.session.name,
+        age:req.session.age,email:req.session.email,error1:req.session.error1,error2:req.session.error2,iduser:iduser});
+});
+
+app.get("/articles_review", (req, res) => {
+    let iduser;
+    iduser=req.session.ID;
+    res.render("articles_review",{username:req.session.username,name:req.session.name,
+        age:req.session.age,email:req.session.email,error1:req.session.error1,error2:req.session.error2,iduser:iduser});
+});
+
+app.get("/films_review", (req, res) => {
+    let iduser;
+    iduser=req.session.ID;
+    res.render("films_review",{username:req.session.username,name:req.session.name,
+        age:req.session.age,email:req.session.email,error1:req.session.error1,error2:req.session.error2,iduser:iduser});
+});
+
+app.get("/profile", (req, res) => {
+    let iduser;
+    iduser=req.session.ID;
+    res.render("profile",{username:req.session.username,name:req.session.name,
+        age:req.session.age,email:req.session.email,error1:req.session.error1,error2:req.session.error2,iduser:iduser});
 });
 
 
@@ -53,9 +90,11 @@ app.post("/register",async (req,res)=> {
     else {
         const salt = bcrypt.genSaltSync(10)
         const cryp_mdp = bcrypt.hashSync(req.body.password, salt) // ache le mdp pour l'enregistrer
-        await db.addUser(req.body.username,cryp_mdp,req.body.adresse);  // ajoute l'utilisateur à la bdd
+        await db.addUser(req.body.username,cryp_mdp,req.body.email,req.body.name,req.body.age);  // ajoute l'utilisateur à la bdd
         req.session.username = req.body.username
-        req.session.adresse = req.body.adresse
+        req.session.email = req.body.email
+        req.session.name = req.body.name
+        req.session.age = req.body.age
         req.session.ID = await getID(req.session.username);
         res.redirect("/");
     }
@@ -63,14 +102,15 @@ app.post("/register",async (req,res)=> {
 
 app.post("/login",async (req,res)=>{ // async pour dire que fonction est asynchrone
     req.session.error2 = "";
-    console.log(req.body.username);
     await db.getUser(req.body.username).then(user=>{ // "await" pour dire que on attend "getUser" pour continuer
         if(user){
             bcrypt.compare(req.body.password,user.password).then(async passwordCorrect =>{
                 if(passwordCorrect){
                     req.session.username = req.body.username;
                     req.session.ID = await getID(req.session.username);
-                    console.log(req.session.money)
+                    req.session.age = await getAge(req.session.username);
+                    req.session.name = await getName(req.session.username);
+                    req.session.email = await getEmail(req.session.username);
                     res.redirect('/');
                 }else{
                     req.session.error2 = "Wrong password, try again"

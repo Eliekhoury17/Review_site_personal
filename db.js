@@ -18,6 +18,16 @@ User.init({
         allowNull:false,
         primaryKey: true
     },
+    name:{
+        type:DataTypes.STRING,
+        unique:false,
+        allowNull:false,
+    },
+    age:{
+        type:DataTypes.INTEGER,
+        unique:false,
+        allowNull:false,
+    },
     password:{
         type:DataTypes.TEXT,
         unique:true,
@@ -26,10 +36,10 @@ User.init({
     email:{
         type:DataTypes.TEXT,
         unique:true,
-        allowNull:false
+        allowNull:true
     },
     administrator:{
-        type:DataTypes.FLOAT,
+        type:DataTypes.BOOLEAN,
         defaultValue:false
     }
 },{sequelize,modelName:'User'});
@@ -46,11 +56,13 @@ module.exports= {
                 }
             });
     },
-    addUser: function addUser(username, password, email) {
+    addUser: function addUser(username, password, email, name, age) {
         return User.create({
             username: username,
             password: password,
-            email: email
+            email: email,
+            name: name,
+            age: age
         }).then(user => {
             console.log("User added : " + user);
             return true;
@@ -68,7 +80,39 @@ module.exports= {
                 return false
             }
         }).catch(err => {
-            console.log("Unable to rretrive money of " + username + ": " + err)
+            return false
+        })
+    },
+    getAge: async function getID(username) {
+        return User.findOne({where: {username: username}, attributes: ["age"]}).then(mon => {
+            if (mon) {
+                return mon.dataValues.age
+            } else {
+                return false
+            }
+        }).catch(err => {
+            return false
+        })
+    },
+    getName: async function getID(username) {
+        return User.findOne({where: {username: username}, attributes: ["name"]}).then(mon => {
+            if (mon) {
+                return mon.dataValues.name
+            } else {
+                return false
+            }
+        }).catch(err => {
+            return false
+        })
+    },
+    getEmail: async function getID(username) {
+        return User.findOne({where: {username: username}, attributes: ["email"]}).then(mon => {
+            if (mon) {
+                return mon.dataValues.email
+            } else {
+                return false
+            }
+        }).catch(err => {
             return false
         })
     }

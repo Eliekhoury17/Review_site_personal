@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Profile</title>
+</head>
+<body>
+    <%-include("banner.ejs", {}) %>
+    <div class="profile-container">
+        <div class="card">
+            <div class="left-container">
+                <img src="https://cdn.pixabay.com/photo/2015/01/08/18/29/entrepreneur-593358__480.jpg" alt="Profile Image">
+                <h2 class="gradienttext"><%= name %></h2>
+            </div>
+            <div class="right-container">
+                <h3 class="gradienttext">Profile Details</h3>
+                <table>
+                    <tr>
+                        <td>Name :</td>
+                        <td><%= name %></td>
+                    </tr>
+                    <tr>
+                        <td>Username :</td>
+                        <td><%= username %></td>
+                    </tr>
+                    <tr>
+                        <td>Age :</td>
+                        <td><%= age %></td>
+                    </tr>
+                    <tr>
+                        <td>Email :</td>
+                        <td><%= email %></td>
+                    </tr>
+                    </table>
+                </div>
+        </div>
+    </div>
+</body>
+</html>
