@@ -22,56 +22,77 @@ let db = require("./db")
 app.use(express.static('public'));
 app.use(bodyParser.json());
 
-const {getID,getAge,getName,getEmail,addUser,getUser} = require("./db");
+const {getID,getAge,getName,getEmail,getImage,checkKey,addUser,getUser} = require("./db");
 const { name } = require('ejs');
+
+/////////////////// Image /////////////////////////////////////////////////////////
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb, newKey) {
+        cb(null, './public');
+    },
+    filename: async function (req, file, cb) {
+        let characters = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+        let lenString = 7;
+        let randString = '';
+        while (randString === '') {
+            randString = '';
+            for (let i = 0; i < lenString; i++) {
+                randString += characters[Math.floor(Math.random() * characters.length)];
+            }
+        }
+        cb(null, randString + ".jpg");
+    }
+});
+const upload = multer({storage: storage});
 
 ///////////////////  GET   ////////////////////////////////////////////////////////
 app.get("/", (req, res) => {
     let iduser;
     iduser=req.session.ID;
     res.render("home",{username:req.session.username,name:req.session.name,
-        age:req.session.age,email:req.session.email,error1:req.session.error1,error2:req.session.error2,iduser:iduser});
+        age:req.session.age,email:req.session.email,image:req.session.image,error1:req.session.error1,error2:req.session.error2,iduser:iduser});
 });
 
 app.get("/login", (req, res) => {
     let iduser;
     iduser=req.session.ID;
     res.render("login",{username:req.session.username,name:req.session.name,
-        age:req.session.age,email:req.session.email,error1:req.session.error1,error2:req.session.error2,iduser:iduser});
+        age:req.session.age,email:req.session.email,image:req.session.image,error1:req.session.error1,error2:req.session.error2,iduser:iduser});
 });
 app.get("/register", (req, res) => {
     let iduser;
     iduser=req.session.ID;
     res.render("register",{username:req.session.username,name:req.session.name,
-        age:req.session.age,email:req.session.email,error1:req.session.error1,error2:req.session.error2,iduser:iduser});
+        age:req.session.age,email:req.session.email,image:req.session.image,error1:req.session.error1,error2:req.session.error2,iduser:iduser});
 });
 
 app.get("/books_review", (req, res) => {
     let iduser;
     iduser=req.session.ID;
     res.render("books_review",{username:req.session.username,name:req.session.name,
-        age:req.session.age,email:req.session.email,error1:req.session.error1,error2:req.session.error2,iduser:iduser});
+        age:req.session.age,email:req.session.email,image:req.session.image,error1:req.session.error1,error2:req.session.error2,iduser:iduser});
 });
 
 app.get("/articles_review", (req, res) => {
     let iduser;
     iduser=req.session.ID;
     res.render("articles_review",{username:req.session.username,name:req.session.name,
-        age:req.session.age,email:req.session.email,error1:req.session.error1,error2:req.session.error2,iduser:iduser});
+        age:req.session.age,email:req.session.email,image:req.session.image,error1:req.session.error1,error2:req.session.error2,iduser:iduser});
 });
 
 app.get("/films_review", (req, res) => {
     let iduser;
     iduser=req.session.ID;
     res.render("films_review",{username:req.session.username,name:req.session.name,
-        age:req.session.age,email:req.session.email,error1:req.session.error1,error2:req.session.error2,iduser:iduser});
+        age:req.session.age,email:req.session.email,image:req.session.image,error1:req.session.error1,error2:req.session.error2,iduser:iduser});
 });
 
 app.get("/profile", (req, res) => {
     let iduser;
     iduser=req.session.ID;
     res.render("profile",{username:req.session.username,name:req.session.name,
-        age:req.session.age,email:req.session.email,error1:req.session.error1,error2:req.session.error2,iduser:iduser});
+        age:req.session.age,email:req.session.email,image:req.session.image,error1:req.session.error1,error2:req.session.error2,iduser:iduser});
 });
 
 
@@ -81,7 +102,7 @@ app.post("/",async (req,res)=>{
     const users = await db.getUser(req.session.username);
 });
 
-app.post("/register",async (req,res)=> {
+app.post("/register",upload.single("image"),async (req,res)=> {
     req.session.error1 = "";
     if (await db.getUser(req.body.username)) { // si le pseudo est déjà dans la bdd -> n'enregistre pas l'utilisateur
         req.session.error1 = "username is already used";
@@ -90,11 +111,12 @@ app.post("/register",async (req,res)=> {
     else {
         const salt = bcrypt.genSaltSync(10)
         const cryp_mdp = bcrypt.hashSync(req.body.password, salt) // ache le mdp pour l'enregistrer
-        await db.addUser(req.body.username,cryp_mdp,req.body.email,req.body.name,req.body.age);  // ajoute l'utilisateur à la bdd
+        await db.addUser(req.body.username,cryp_mdp,req.body.email,req.body.name,req.body.age,req.file.filename);  // ajoute l'utilisateur à la bdd
         req.session.username = req.body.username
         req.session.email = req.body.email
         req.session.name = req.body.name
         req.session.age = req.body.age
+        req.session.image = req.file.filename
         req.session.ID = await getID(req.session.username);
         res.redirect("/");
     }
@@ -111,6 +133,7 @@ app.post("/login",async (req,res)=>{ // async pour dire que fonction est asynchr
                     req.session.age = await getAge(req.session.username);
                     req.session.name = await getName(req.session.username);
                     req.session.email = await getEmail(req.session.username);
+                    req.session.image = await getImage(req.session.username);
                     res.redirect('/');
                 }else{
                     req.session.error2 = "Wrong password, try again"
@@ -124,6 +147,7 @@ app.post("/login",async (req,res)=>{ // async pour dire que fonction est asynchr
         }
     });
 });
+
 
 
 https.createServer({

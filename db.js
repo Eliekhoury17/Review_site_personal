@@ -41,6 +41,10 @@ User.init({
     administrator:{
         type:DataTypes.BOOLEAN,
         defaultValue:false
+    },
+    image:{
+        type:DataTypes.TEXT,
+        allowNull:true
     }
 },{sequelize,modelName:'User'});
 
@@ -56,13 +60,14 @@ module.exports= {
                 }
             });
     },
-    addUser: function addUser(username, password, email, name, age) {
+    addUser: function addUser(username, password, email, name, age, image) {
         return User.create({
             username: username,
             password: password,
             email: email,
             name: name,
-            age: age
+            age: age,
+            image:image
         }).then(user => {
             console.log("User added : " + user);
             return true;
@@ -83,7 +88,7 @@ module.exports= {
             return false
         })
     },
-    getAge: async function getID(username) {
+    getAge: async function getAge(username) {
         return User.findOne({where: {username: username}, attributes: ["age"]}).then(mon => {
             if (mon) {
                 return mon.dataValues.age
@@ -94,7 +99,7 @@ module.exports= {
             return false
         })
     },
-    getName: async function getID(username) {
+    getName: async function getName(username) {
         return User.findOne({where: {username: username}, attributes: ["name"]}).then(mon => {
             if (mon) {
                 return mon.dataValues.name
@@ -105,7 +110,7 @@ module.exports= {
             return false
         })
     },
-    getEmail: async function getID(username) {
+    getEmail: async function getEmail(username) {
         return User.findOne({where: {username: username}, attributes: ["email"]}).then(mon => {
             if (mon) {
                 return mon.dataValues.email
@@ -115,6 +120,28 @@ module.exports= {
         }).catch(err => {
             return false
         })
+    },
+    getImage: async function getImage(username) {
+        return User.findOne({where: {username: username}, attributes: ["image"]}).then(mon => {
+            if (mon) {
+                return mon.dataValues.image
+            } else {
+                return false
+            }
+        }).catch(err => {
+            return false
+        })
+    },
+    checkKey:async function checkKey(iD,key) {
+        const key2 = iD.toString()+"-"+key+".jpg";
+        return Products.findOne({where: {image:key2}})
+            .then(k => {
+                if (k) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
     }
     
 }
