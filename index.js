@@ -19,7 +19,7 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 let db = require("./db")
 
-app.use(express.static('public'));
+app.use(express.static('public')); 
 app.use(bodyParser.json());
 
 const {getID,getAge,getName,getEmail,getImage,checkKey,addUser,getUser} = require("./db");

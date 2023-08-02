@@ -42,6 +42,10 @@ body {
     border-radius: 50px;
 }
 
+.banner p{
+    margin-left: 1100px;
+}
+
 /* When the screen is less than 600px wide, stack the links and the search field vertically instead of horizontally */
 @media screen and (max-width: 600px) {
     .banner a, .banner input[type=text] {
@@ -215,7 +219,7 @@ body{
 }
 
 .login-body{
-    margin: 200px 595px 400px;
+    margin: 200px 595px 200px;
     padding-left: 60px;
     padding-right: 20px;
     padding-top: 40px;
@@ -353,9 +357,9 @@ body{
     }
 }
 .card img {
-    width: 200px;
-    height: 200px;
-    max-width: 200px;
+    width: 250px;
+    height: 300px;
+    max-width: 300px;
     border-radius: 50%;
     margin: 10px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
